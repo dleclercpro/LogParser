@@ -3,7 +3,6 @@ import { Environment, LogJSON, Severity } from './types';
 import { ENV } from './config';
 import FromTextLogs from './models/streams/FromTextLogs';
 import ToJSONLogs from './models/streams/ToJSONLogs';
-import Log from './models/Log';
 import LineExtractor from './models/streams/LineExtractor';
 import LineParser from './models/streams/LineParser';
 import { pipeline } from 'stream/promises';
@@ -38,14 +37,14 @@ const parseArgs = (): IOArgs => {
 
 
 
-interface Args<E, D> {
+interface Args {
     inputPipe: PipeRead,
     outputPipe: PipeWrite,
     transforms: Transform[],
     filepaths: IOArgs,
 }
 
-const run = async (args: Args<Event, Log>) => {
+const run = async (args: Args) => {
     const { inputPipe, outputPipe, transforms, filepaths } = args;
     const { input, output } = filepaths;
 
