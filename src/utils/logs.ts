@@ -4,16 +4,20 @@ import { randomUUID } from 'crypto';
 import { getRandom, getRange } from './array';
 import { writeFile } from './file';
 
+const N_POSSIBLE_ERRORS = 500;
+const MESSAGE_SIZE = 10;
+const ERROR_SIZE = 10;
+
 const generateAppLog = () => {
     const now = new Date();
 
-    const message = generate(10).join(' ');
-    const error = generate(10).join(' ');
+    const message = generate(MESSAGE_SIZE).join(' ');
+    const error = generate(ERROR_SIZE).join(' ');
     
     const infos = {
         transactionId: randomUUID(),
         details: message,
-        code: 404,
+        code: Math.ceil(Math.random() * N_POSSIBLE_ERRORS),
         err: error,
     };
 

@@ -11,7 +11,7 @@ abstract class PipeRead extends Pipe<ReadStream> {
     protected abstract onClose(): void;
     protected abstract onError(error: Error): void;
 
-    public create(filepath: string, options?: StreamOptions) {
+    public createStream(filepath: string, options?: StreamOptions) {
         this.stream = fs.createReadStream(filepath, options);
 
         this.stream.on('ready', () => this.onReady());

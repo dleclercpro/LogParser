@@ -12,6 +12,7 @@ import PipeWrite from './models/streams/base/PipeWrite';
 import { deleteFile, truncateFile, appendToFile } from './utils/file';
 import logger from './logger';
 import { generateAppLogs } from './utils/logs';
+import path from 'path';
 
 interface IOArgs {
     input: string,
@@ -46,7 +47,8 @@ interface Args {
 
 const run = async (args: Args) => {
     const { inputPipe, outputPipe, transforms, filepaths } = args;
-    const { input, output } = filepaths;
+    const input = path.join(__dirname, '..', filepaths.input);
+    const output = path.join(__dirname, '..', filepaths.output);
 
     const now = new Date();
     logger.info(`Started log import/export at: ${now.toISOString()}`);
@@ -65,9 +67,9 @@ const run = async (args: Args) => {
 
     // Write filtered parsed logs into JSON file
     await pipeline([
-        inputPipe.create(input),
+        inputPipe.createStream(input),
         ...transforms,
-        outputPipe.create(output, { flags: 'a' }),
+        outputPipe.createStream(output, { flags: 'a' }),
     ]);
 
     // Remove last comma, and close array in JSON file

@@ -4,10 +4,10 @@
   "author": "David Leclerc",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "cross-env ENV=development nodemon ./src/index.ts --input ./data/app.log --output ./data/errors.json | pino-pretty",
+    "start": "cross-env ENV=development nodemon ./src/index.ts --input ./data/app.log --output ./data/errors.json",
     "start:prod": "ENV=production node ./parser.js --input ./data/app.log --output ./data/errors.json",
     "test": "cross-env ENV=test jest",
-    "build": "npm run clean && tsc -p . && cp ./data/app.log ./dist",
+    "build": "npm run clean && tsc -p .",
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
