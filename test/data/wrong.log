@@ -1,0 +1,11 @@
+INVALID_TIMESTAMP - debug - {"transactionId":"9abc55b2-807b-4361-9dbe-aa88b1b2e978","details":"About to request the user information","userId": 10}
+ - debug - {"transactionId":"9abc55b2-807b-4361-9dbe-aa88b1b2e978","details":"About to request user orders list","userId": 10}
+2021-08-09T02:12:51.254Z - INVALID_LEVEL - {"transactionId":"9abc55b2-807b-4361-9dbe-aa88b1b2e978","details":"About to request user orders list","userId": 10}
+2021-08-09T02:12:51.255Z -  - {"transactionId":"9abc55b2-807b-4361-9dbe-aa88b1b2e821","details":"Service is started"}
+2021-08-09T02:12:51.257Z - 
+2021-08-09T02:12:51.257Z - debug - {"transactionId":"","details":"User information is gathered"}
+2021-08-09T02:12:51.258Z - debug - {"details":"About to request user orders list"}
+2021-08-09T02:12:51.259Z - error - {"transactionId":"9abc55b2-807b-4361-9dbe-aa88b1b2e978","details":""}
+2021-08-09T02:12:51.259Z - {"transactionId":"9abc55b2-807b-4361-9dbe-aa88b1b2e821"}
+ -  - 
+WRONG_LINE
