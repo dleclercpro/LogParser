@@ -1,35 +1,54 @@
 import { Transform, TransformCallback } from 'stream';
 import logger from '../../logger';
+import { getLast, sum } from '../../utils/array';
 
 class LineExtractor extends Transform {
     protected counts: { bytes: number, lines: number };
-    protected prevData?: string;
+    protected buffer: string;
 
     public constructor() {
         super();
         
         this.counts = { bytes: 0, lines: 0 };
+        this.buffer = '';
     }
 
     public _transform = (chunk: Buffer, encoding: BufferEncoding, done: TransformCallback) => {
         const data = chunk.toString();
-        const isLastData = data.length < this.readableHighWaterMark;
-        const input = this.prevData ? this.prevData + data : data;
+        const input = this.buffer ? this.buffer + data : data;
         const rawLines = input.split('\n');
 
-        // Store last bytes of data, in case line is incomplete
-        this.prevData = !isLastData ? rawLines[rawLines.length - 1] : '';
+        // Store last bytes of data, in case last line is incomplete
+        this.buffer = getLast(rawLines);
 
         // Keep complete lines only
-        const lines = !isLastData ? rawLines.slice(0, -1) : rawLines;
+        let lines: string[] = [];
 
+        if (rawLines.length > 1) {
+            lines = rawLines.slice(0, -1);
+
+            this.updateCounters(lines);
+        }
+
+        done(null, lines.join('\n'));
+    }
+
+    public _final(done: (error?: Error | null) => void): void {
+
+        // In case buffer was not emptied on last pass: drain it
+        if (this.buffer) {
+            this.push(this.buffer);
+        }
+
+        done(null);
+    }
+
+    private updateCounters(lines: string[]) {
         this.counts.lines += lines.length;
-        this.counts.bytes += chunk.length;
+        this.counts.bytes += sum(lines.map(line => line.length));
 
         logger.trace(`# lines read: ${this.counts.lines}`);
         logger.trace(`# bytes read: ${this.counts.bytes}`);
-
-        done(null, lines.join('\n'));
     }
 }
 

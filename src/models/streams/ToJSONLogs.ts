@@ -12,7 +12,7 @@ class ToJSONLogs extends PipeWrite {
     }
 
     protected onDrain() {
-        logger.debug(`The writing stream was drained: ${this.stream?.writableFinished}.`);
+        logger.debug(`The writing stream was drained.`);
     }
 
     protected onOpen() {

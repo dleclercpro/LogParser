@@ -1,3 +1,7 @@
+export const sum = (arr: number[]) => {
+    return arr.reduce((count, x) => count + x, 0);
+}
+
 export const getRange = (from: number, to?: number) => {
     let size;
 
@@ -17,4 +21,8 @@ export const getRange = (from: number, to?: number) => {
 
 export const getRandom = (arr: any[]) => {
     return arr[Math.floor(Math.random() * arr.length)];
+}
+
+export const getLast = (arr: any[]) => {
+    return arr[arr.length - 1];
 }

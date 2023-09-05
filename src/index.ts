@@ -1,4 +1,3 @@
-import minimist from 'minimist';
 import { Environment, LogJSON, Severity } from './types';
 import { ENV } from './config';
 import FromTextLogs from './models/streams/FromTextLogs';
@@ -13,30 +12,7 @@ import { deleteFile, truncateFile, appendToFile } from './utils/file';
 import logger from './logger';
 import { generateAppLogs } from './utils/logs';
 import path from 'path';
-
-interface IOArgs {
-    input: string,
-    output: string,
-}
-
-const parseArgs = (): IOArgs => {
-    const { input, output } = minimist(process.argv.slice(2));
-
-    if (!input) {
-        throw new Error(`No path to input log file provided!`);
-    }
-
-    if (!output) {
-        throw new Error(`No path to output log file provided!`);
-    }
-
-    return {
-        input,
-        output,
-    };
-}
-
-
+import { IOArgs, parseArgs } from './utils/cli';
 
 interface Args {
     inputPipe: PipeRead,
@@ -53,8 +29,10 @@ const run = async (args: Args) => {
     const now = new Date();
     logger.info(`Started log import/export at: ${now.toISOString()}`);
 
+    // FIXME: only if needed
+    // FIXME: make sure directory exists
     logger.info(`Generating ${1000} random log entries in: ${input}`);
-    await generateAppLogs(input , 1000);
+    await generateAppLogs(input, 1000);
 
     logger.info(`Looking for log entries in: '${input}'`);
     logger.info(`Parsing and writing log entries to: '${output}'`);
