@@ -6,7 +6,7 @@ Node application which uses streams in order to read application logs, parse, fi
 ### Development mode
 In order to run the log parser in development mode, simply execute the following command in the terminal:
 ```
-npm run start
+npm start
 ```
 
 ### Production mode
