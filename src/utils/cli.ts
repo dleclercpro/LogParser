@@ -1,6 +1,6 @@
 import minimist from 'minimist';
 
-export interface IOArgs {
+interface IOArgs {
     input: string,
     output: string,
 }

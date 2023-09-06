@@ -2,9 +2,22 @@ import Stream from 'stream';
 import { StreamOptions } from '../../../types';
 
 abstract class Pipe<S extends Stream> {
+    protected filepath: string;
     protected stream?: S;
 
-    public abstract createStream(filepath: string, options: StreamOptions): void;
+    protected abstract createStream(options?: StreamOptions): void;
+
+    public constructor(filepath: string) {
+        this.filepath = filepath;
+    }
+
+    public getStream(options?: StreamOptions) {
+        if (!this.stream) {
+            this.createStream(options);
+        }
+
+        return this.stream!;
+    }
 }
 
 export default Pipe;
