@@ -9,12 +9,24 @@ export type Time = {
     unit: TimeUnit,
 }
 
+export type Memory = {
+    size: number,
+    unit: MemoryUnit,
+}
+
 export enum TimeUnit {
     Days = 'D',
     Hours = 'h',
     Minutes = 'm',
     Seconds = 's',
     Milliseconds = 'ms',
+}
+
+export enum MemoryUnit {
+    Bytes = 'B',
+    Kilobytes = 'KB',
+    Megabytes = 'MB',
+    Gigabytes = 'GB',
 }
 
 export enum Severity {

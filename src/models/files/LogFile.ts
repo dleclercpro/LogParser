@@ -1,4 +1,4 @@
-import { createFile, deleteFile, touchFile } from '../../utils/file';
+import { createFile, deleteFile, getFileSize, touchFile } from '../../utils/file';
 import PipeRead from '../pipes/PipeRead';
 import PipeWrite from '../pipes/PipeWrite';
 
@@ -9,6 +9,10 @@ abstract class LogFile {
 
     constructor(path: string) {
         this.path = path;
+    }
+
+    public getSize() {
+        return getFileSize(this.path);
     }
 
     public getPath() {

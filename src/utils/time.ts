@@ -1,4 +1,5 @@
 import { Time, TimeUnit } from '../types';
+import { round } from './math';
 
 export const sleep = async (time: Time) => {
     await new Promise(resolve => setTimeout(resolve, toMs(time)));
@@ -65,5 +66,5 @@ export const formatTime = (time: Time) => {
         }
     }
 
-    return `${t}${u}`;
+    return `~${round(t, 3)}${u}`;
 }

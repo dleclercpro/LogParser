@@ -10,6 +10,7 @@ import { parseArgs } from './utils/cli';
 import JSONLogFile from './models/files/JSONLogFile';
 import TextLogFile from './models/files/TextLogFile';
 import { formatTime } from './utils/time';
+import { formatSize } from './utils/file';
 
 const ROOT_DIR = path.join(__dirname, '..');
 
@@ -22,8 +23,8 @@ interface Args {
 const run = async (args: Args) => {
     const { inputFile, outputFile, transforms } = args;
 
-    logger.info(`Reading logs from: '${inputFile.getPath()}'`);
-    logger.info(`Writing logs to: '${outputFile.getPath()}'`);
+    logger.info(`Reading logs from: '${inputFile.getPath()}' [${formatSize(inputFile.getSize())}]`);
+    logger.info(`Writing logs to: '${outputFile.getPath()}' [${formatSize(outputFile.getSize())}]`);
 
     // Generate dummy app logs if necessary
     if (await inputFile.touch()) {

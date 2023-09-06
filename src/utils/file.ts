@@ -1,6 +1,48 @@
 import fs from 'fs';
 import path from 'path';
 import logger from '../logger';
+import { Memory, MemoryUnit } from '../types';
+import { round } from './math';
+
+export const toBytes = ({ size, unit }: Memory) => {
+    switch (unit) {
+        case MemoryUnit.Gigabytes:
+            return size * Math.pow(1_000, 3);
+        case MemoryUnit.Megabytes:
+            return size * Math.pow(1_000, 2);
+        case MemoryUnit.Kilobytes:
+            return size * Math.pow(1_000, 1);
+        case MemoryUnit.Bytes:
+            return size;
+        default:
+            throw new Error('Invalid memory unit.');
+    }
+}
+
+export const formatSize = (memory: Memory) => {
+    let s = toBytes(memory);
+    let u = MemoryUnit.Bytes;
+
+    // ms -> s
+    if (s >= 1_000) {
+        s /= 1_000;
+        u = MemoryUnit.Kilobytes;
+
+        // s -> m
+        if (s >= 1_000) {
+            s /= 1_000;
+            u = MemoryUnit.Megabytes;
+
+            // m -> h
+            if (s >= 1_000) {
+                s /= 1_000;
+                u = MemoryUnit.Gigabytes;
+            }
+        }
+    }
+
+    return `~${round(s, 1)}${u}`;
+}
 
 export const deleteFile = async (filepath: string) => {
 
@@ -78,24 +120,24 @@ export const createFile = async (filepath: string) => {
     await writeFile(filepath, '');
 }
 
-export const truncateFile = async (filepath: string, len: number) => {
-    const size = await getFileSize(filepath);
+export const truncateFile = async (filepath: string, bytes: number) => {
+    const { size } = await getFileSize(filepath);
 
     return new Promise<void>((resolve, reject) => {
-        fs.truncate(filepath, size - len, (err) => {
+        fs.truncate(filepath, size - bytes, (err) => {
             if (err) reject(err);
 
-            logger.trace(`Truncated ${len} bytes from file: ${filepath}`);
+            logger.trace(`Truncated ${bytes} bytes from file: ${filepath}`);
 
             resolve();
         });
     });
 }
 
-export const getFileSize = async (filepath: string, options = { encoding: 'utf-8' as BufferEncoding }) => {
-    const data = await readFile(filepath, options);
+export const getFileSize = (filepath: string) => {
+    const { size } = fs.statSync(filepath);
 
-    return data.length;
+    return { size, unit: MemoryUnit.Bytes };
 }
 
 export const readJSON = async (filepath: string) => {
