@@ -2,6 +2,10 @@ import { Transform, TransformCallback } from 'stream';
 import logger from '../../logger';
 import { getLast, sum } from '../../utils/array';
 
+/**
+ * This transform pipe is responsible for buffering lines:
+ * only complete lines are passed down to the next pipe.
+ */
 class LineExtractor extends Transform {
     protected counts: { bytes: number, lines: number };
     protected buffer: string;

@@ -59,3 +59,5 @@ export interface LogJSON {
     transactionId: string,
     err?: string,
 }
+
+export type LogFilter = (log: LogJSON) => boolean;

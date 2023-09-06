@@ -1,13 +1,12 @@
 import { Transform, TransformCallback } from 'stream';
 import { isValidISODate } from '../../utils/time';
 import { SEVERITY_ORDERING } from '../../constants';
-import { LogJSON, Severity } from '../../types';
+import { LogFilter, LogJSON, Severity } from '../../types';
 import logger from '../../logger';
 
 const SEPARATOR = ' - ';
 const TAB_SIZE = 2;
 
-type LogFilter = (log: LogJSON) => boolean;
 type Args = { filter?: LogFilter };
 
 class LineParser extends Transform {
