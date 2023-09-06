@@ -66,5 +66,5 @@ export const formatTime = (time: Time) => {
         }
     }
 
-    return `~${round(t, 3)}${u}`;
+    return `~${round(t, 1)}${u}`;
 }

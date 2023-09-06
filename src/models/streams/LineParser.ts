@@ -9,6 +9,11 @@ const TAB_SIZE = 2;
 
 type Args = { filter?: LogFilter };
 
+/**
+ * This transform pipe is responsible for validating, parsing, and
+ * formatting a received complete log line. It can also filter raw lines,
+ * based on an input filter at construction.
+ */
 class LineParser extends Transform {
     private customFilter: LogFilter;
 
