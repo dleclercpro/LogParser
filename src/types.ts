@@ -2,13 +2,28 @@ export enum Environment {
     Development = 'development',
     Test = 'test',
     Production = 'production',
-};
+}
+
+export type Time = {
+    time: number,
+    unit: TimeUnit,
+}
+
+export enum TimeUnit {
+    Days = 'D',
+    Hours = 'h',
+    Minutes = 'm',
+    Seconds = 's',
+    Milliseconds = 'ms',
+}
 
 export enum Severity {
+    Trace = 'trace',
     Debug = 'debug',
     Info = 'info',
     Warn = 'warn',
     Error = 'error',
+    Fatal = 'fatal',
 }
 
 export interface StreamOptions {

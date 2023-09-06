@@ -7,7 +7,7 @@ import LogFile from './LogFile';
 
 class TextLogFile extends LogFile {
 
-    public async generate(count: number = 1000) {
+    public async generate(count: number) {
         logger.info(`Generating ${count} random log entries in: ${this.path}`);
 
         const logs = getRange(count).map(generateAppLog);
