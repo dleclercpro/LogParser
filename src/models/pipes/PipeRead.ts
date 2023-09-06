@@ -1,7 +1,7 @@
 import fs, { ReadStream } from 'fs';
-import { StreamOptions } from '../../../types';
+import { StreamOptions } from '../../types';
 import Pipe from './Pipe';
-import logger from '../../../logger';
+import logger from '../../logger';
 
 class PipeRead extends Pipe<ReadStream> {
 

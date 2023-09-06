@@ -1,6 +1,6 @@
 import { createFile, deleteFile, touchFile } from '../../utils/file';
-import PipeRead from '../streams/base/PipeRead';
-import PipeWrite from '../streams/base/PipeWrite';
+import PipeRead from '../pipes/PipeRead';
+import PipeWrite from '../pipes/PipeWrite';
 
 abstract class LogFile {
     protected path: string;

@@ -1,5 +1,5 @@
 import { appendToFile, truncateFile } from '../../utils/file';
-import PipeWrite from '../streams/base/PipeWrite';
+import PipeWrite from '../pipes/PipeWrite';
 import LogFile from './LogFile';
 
 class JSONLogFile extends LogFile {

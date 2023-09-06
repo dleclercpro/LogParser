@@ -2,7 +2,7 @@ import logger from '../../logger';
 import { getRange } from '../../utils/array';
 import { writeFile } from '../../utils/file';
 import { generateAppLog } from '../../utils/logs';
-import PipeRead from '../streams/base/PipeRead';
+import PipeRead from '../pipes/PipeRead';
 import LogFile from './LogFile';
 
 class TextLogFile extends LogFile {

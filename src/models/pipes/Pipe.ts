@@ -1,5 +1,5 @@
 import Stream from 'stream';
-import { StreamOptions } from '../../../types';
+import { StreamOptions } from '../../types';
 
 abstract class Pipe<S extends Stream> {
     protected filepath: string;
