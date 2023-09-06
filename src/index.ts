@@ -23,13 +23,14 @@ interface Args {
 const run = async (args: Args) => {
     const { inputFile, outputFile, transforms } = args;
 
-    logger.info(`Reading logs from: '${inputFile.getPath()}' [${formatSize(inputFile.getSize())}]`);
-    logger.info(`Writing logs to: '${outputFile.getPath()}' [${formatSize(outputFile.getSize())}]`);
-
     // Generate dummy app logs if necessary
     if (await inputFile.touch()) {
         await inputFile.generate(N_LOGS);
     }
+
+    // Give user some info regarding
+    logger.info(`Reading logs from: '${inputFile.getPath()}'`);
+    logger.info(`Writing logs to: '${outputFile.getPath()}'`);
 
     // Delete existing and create new file
     await outputFile.delete();
@@ -47,6 +48,10 @@ const run = async (args: Args) => {
 
     // Remove last comma, and close array in JSON file
     await outputFile.end();
+
+    // Give user info about files
+    logger.info(`Input file size was: ${formatSize(inputFile.getSize())}`);
+    logger.info(`Output file size is: ${formatSize(outputFile.getSize())}`);
 }
 
 
@@ -62,7 +67,7 @@ const execute = async () => {
         inputFile: new TextLogFile(path.join(ROOT_DIR, input)),
         outputFile: new JSONLogFile(path.join(ROOT_DIR, output)),
         transforms: [new LineExtractor(), new LineParser({
-            filter: ({ loglevel }: LogJSON) => loglevel === Severity.Error,
+            filter: ({ level }: LogJSON) => level === Severity.Error,
         })],
     });
 

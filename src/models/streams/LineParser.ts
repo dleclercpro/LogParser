@@ -81,7 +81,7 @@ class LineParser extends Transform {
         const { transactionId, err } = JSON.parse(info);
 
         return {
-            loglevel: level,
+            level,
             timestamp,
             transactionId,
             err,

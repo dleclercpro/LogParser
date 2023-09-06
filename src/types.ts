@@ -54,7 +54,7 @@ export interface LogLine {
 }
 
 export interface LogJSON {
-    loglevel: string,
+    level: string,
     timestamp: string
     transactionId: string,
     err?: string,
