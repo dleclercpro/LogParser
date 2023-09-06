@@ -1,48 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import logger from '../logger';
-import { Memory, MemoryUnit } from '../types';
-import { round } from './math';
-
-export const toBytes = ({ size, unit }: Memory) => {
-    switch (unit) {
-        case MemoryUnit.Gigabytes:
-            return size * Math.pow(1_000, 3);
-        case MemoryUnit.Megabytes:
-            return size * Math.pow(1_000, 2);
-        case MemoryUnit.Kilobytes:
-            return size * Math.pow(1_000, 1);
-        case MemoryUnit.Bytes:
-            return size;
-        default:
-            throw new Error('Invalid memory unit.');
-    }
-}
-
-export const formatSize = (memory: Memory) => {
-    let s = toBytes(memory);
-    let u = MemoryUnit.Bytes;
-
-    // ms -> s
-    if (s >= 1_000) {
-        s /= 1_000;
-        u = MemoryUnit.Kilobytes;
-
-        // s -> m
-        if (s >= 1_000) {
-            s /= 1_000;
-            u = MemoryUnit.Megabytes;
-
-            // m -> h
-            if (s >= 1_000) {
-                s /= 1_000;
-                u = MemoryUnit.Gigabytes;
-            }
-        }
-    }
-
-    return `~${round(s, 1)}${u}`;
-}
+import { MemoryUnit } from '../types';
 
 export const deleteFile = async (filepath: string) => {
 

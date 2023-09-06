@@ -1,6 +1,6 @@
 import { Transform, TransformCallback } from 'stream';
 import { isValidISODate } from '../../utils/time';
-import { SEVERITY_ORDERING } from '../../constants';
+import { NEW_LINE, NEW_LINE_REGEXP, SEVERITY_ORDERING } from '../../constants';
 import { LogFilter, LogJSON, Severity } from '../../types';
 import logger from '../../logger';
 
@@ -24,17 +24,22 @@ class LineParser extends Transform {
     }
 
     public _transform = (chunk: Buffer, encoding: BufferEncoding, done: TransformCallback) => {
-        const lines = chunk.toString().split('\n');
+        try {
+            const lines = chunk.toString().split(NEW_LINE_REGEXP);
 
-        const logs = lines
-            .filter(line => this.validateLine(line))
-            .map(line => this.parseLine(line))
-            .filter(log => this.customFilter(log))
-            .map(log => this.padLines(log))
-            .map(log => `${log},`)
-            .join('\n')
+            const logs = lines
+                .filter(line => this.validateLine(line))
+                .map(line => this.parseLine(line))
+                .filter(log => this.customFilter(log))
+                .map(log => this.padLines(log))
+                .map(log => `${log},`)
+                .join(NEW_LINE);
 
-        done(null, `${logs}\n`);
+            done(null, `${logs}\n`);
+        
+        } catch (err: any) {
+            done(err);
+        }
     }
 
     private validateLine(line: string) {
@@ -53,20 +58,21 @@ class LineParser extends Transform {
         }
 
         // Ensure log infos are present
-        if (!info) {
-            errors.push(`MISSING_INFO`);
-        } else {
-            const { details, transactionId } = JSON.parse(info);
+        try {
+            const { transactionId, details } = JSON.parse(info);
+
+            // Ensure transaction ID is present
+            if (!transactionId) {
+                errors.push(`MISSING_TRANSACTION_ID`);
+            }
 
             // Ensure log message is present
             if (!details) {
                 errors.push(`MISSING_DETAILS`);
             }
-    
-            // Ensure transaction ID is present
-            if (!transactionId) {
-                errors.push(`MISSING_TRANSACTION_ID`);
-            }
+        
+        } catch (err) {
+            errors.push(`MISSING_INFO`);
         }
 
         // Errors found: print them out
@@ -94,9 +100,9 @@ class LineParser extends Transform {
 
     private padLines(log: LogJSON, factor: number = 1) {
         return JSON.stringify(log, undefined, TAB_SIZE)
-                .split('\n')
+                .split(NEW_LINE_REGEXP)
                 .map(log => log.padStart(log.length + factor * TAB_SIZE, ' '))
-                .join('\n')
+                .join(NEW_LINE)
     }
 }
 

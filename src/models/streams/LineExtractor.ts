@@ -1,6 +1,7 @@
 import { Transform, TransformCallback } from 'stream';
 import logger from '../../logger';
 import { getLast, sum } from '../../utils/array';
+import { NEW_LINE, NEW_LINE_REGEXP } from '../../constants';
 
 /**
  * This transform pipe is responsible for buffering lines:
@@ -18,33 +19,42 @@ class LineExtractor extends Transform {
     }
 
     public _transform = (chunk: Buffer, encoding: BufferEncoding, done: TransformCallback) => {
-        const data = chunk.toString();
-        const input = this.buffer ? this.buffer + data : data;
-        const rawLines = input.split('\n');
+        try {
+            const data = chunk.toString();
+            const input = this.buffer ? this.buffer + data : data;
+            const rawLines = input.split(NEW_LINE_REGEXP);
+    
+            // Store last bytes of data, in case last line is incomplete
+            this.buffer = getLast(rawLines);
+    
+            // Keep complete lines only
+            let lines: string[] = [];
+    
+            if (rawLines.length > 1) {
+                lines = rawLines.slice(0, -1);
+    
+                this.updateCounters(lines);
+            }
+    
+            done(null, lines.join(NEW_LINE));
 
-        // Store last bytes of data, in case last line is incomplete
-        this.buffer = getLast(rawLines);
-
-        // Keep complete lines only
-        let lines: string[] = [];
-
-        if (rawLines.length > 1) {
-            lines = rawLines.slice(0, -1);
-
-            this.updateCounters(lines);
+        } catch (err: any) {
+            done(err);
         }
-
-        done(null, lines.join('\n'));
     }
 
     public _final(done: (error?: Error | null) => void): void {
+        try {
+            // In case buffer was not emptied on last pass: drain it
+            if (this.buffer) {
+                this.push(this.buffer);
+            }
 
-        // In case buffer was not emptied on last pass: drain it
-        if (this.buffer) {
-            this.push(this.buffer);
+            done(null);
+
+        } catch (err: any) {
+            done(err);
         }
-
-        done(null);
     }
 
     private updateCounters(lines: string[]) {

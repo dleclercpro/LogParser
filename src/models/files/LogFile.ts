@@ -1,4 +1,5 @@
-import { createFile, deleteFile, getFileSize, touchFile } from '../../utils/file';
+import logger from '../../logger';
+import { createFile, deleteFile, getFileSize, readFile, touchFile } from '../../utils/file';
 import PipeRead from '../pipes/PipeRead';
 import PipeWrite from '../pipes/PipeWrite';
 
@@ -29,15 +30,28 @@ abstract class LogFile {
 
     public async touch() {
         const isNew = await touchFile(this.path);
+        
         return isNew;
     }
 
     public async create() {
+        logger.trace(`Creating file: ${this.path}`);
+        
         await createFile(this.path);
     }
 
     public async delete() {
+        logger.trace(`Deleting file: ${this.path}`);
+
         await deleteFile(this.path);
+    }
+
+    public async read() {
+        logger.trace(`Reading file: ${this.path}`);
+        
+        const file = await readFile(this.path);
+
+        return file;
     }
 }
 

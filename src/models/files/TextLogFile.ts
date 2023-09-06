@@ -1,3 +1,4 @@
+import { NEW_LINE } from '../../constants';
 import logger from '../../logger';
 import { getRange } from '../../utils/array';
 import { writeFile } from '../../utils/file';
@@ -12,7 +13,7 @@ class TextLogFile extends LogFile {
 
         const logs = getRange(count).map(generateAppLog);
 
-        await writeFile(this.path, logs.join('\n') + '\n');
+        await writeFile(this.path, logs.join(NEW_LINE) + NEW_LINE);
     }
 
     public getPipeFrom() {

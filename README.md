@@ -1,6 +1,6 @@
 # StreamLogParser
 ## Description
-Node application that uses streams in order to read from application logs, parse, filter, and format said logs, before outputting them in a JSON file.
+Node application which uses streams in order to read application logs, parse, filter, and format them, before outputting them to a JSON file.
 
 ## How to run
 ### Development mode

@@ -5,8 +5,8 @@ import path from 'path';
 import { parseArgs } from './utils/cli';
 import JSONLogFile from './models/files/JSONLogFile';
 import TextLogFile from './models/files/TextLogFile';
-import { formatTime } from './utils/time';
 import TextToJSONLogsAdapter from './models/adapters/TextToJSONLogsAdapter';
+import { formatTime } from './utils/units';
 
 const ROOT_DIR = path.join(__dirname, '..');
 
@@ -23,8 +23,7 @@ const run = async (args: Args) => {
         await inputFile.generate(N_LOGS);
     }
 
-    // Open array in JSON file
-    const adapter = new TextToJSONLogsAdapter(({ level }: LogJSON) => level === Severity.Error)
+    const adapter = new TextToJSONLogsAdapter(({ level }: LogJSON) => level === Severity.Error);
     await adapter.execute(inputFile, outputFile);
 }
 

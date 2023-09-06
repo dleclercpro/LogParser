@@ -1,6 +1,5 @@
 const DATA_DIR = './test/data';
 
-export const TEST_FILEPATH = `${DATA_DIR}/correct.log`;
-export const TEST_FILE_SIZE = 12;
-
-export const WRONG_INPUT_FILEPATH = `${DATA_DIR}/wrong.log`;
+export const VALID_LOGS_FILE_PATH = `${DATA_DIR}/valid.log`;
+export const WRONG_LOGS_FILE_PATH = `${DATA_DIR}/wrong.log`;
+export const RESULTS_LOGS_FILE_PATH = `${DATA_DIR}/results.log`;
