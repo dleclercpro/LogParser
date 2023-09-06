@@ -1,8 +1,7 @@
-import { Time } from '../types';
-import { toMs } from './units';
+import TimeDuration from '../models/TimeDuration';
 
-export const sleep = async (time: Time) => {
-    await new Promise(resolve => setTimeout(resolve, toMs(time)));
+export const sleep = async (duration: TimeDuration) => {
+    await new Promise(resolve => setTimeout(resolve, duration.toMs().getAmount()));
 };
 
 export const isValidISODate = (date: string) => {

@@ -5,10 +5,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "start": "cross-env ENV=development nodemon ./src/index.ts --input ./data/app.log --output ./data/errors.json",
-    "start:prod": "ENV=production node ./parser.js --input ./data/app.log --output ./data/errors.json",
-    "test": "cross-env ENV=test jest --runInBand",
-    "build": "npm run clean && tsc -p .",
-    "clean": "rm -rf ./dist"
+    "test": "cross-env ENV=test jest --runInBand"
   },
   "dependencies": {
     "@babel/core": "^7.21.4",

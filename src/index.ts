@@ -1,4 +1,4 @@
-import { Environment, LogJSON, Severity, TimeUnit } from './types';
+import { Environment, LogJSON, Severity } from './types';
 import { ENV, N_LOGS } from './config';
 import logger from './logger';
 import path from 'path';
@@ -6,7 +6,7 @@ import { parseArgs } from './utils/cli';
 import JSONLogFile from './models/files/JSONLogFile';
 import TextLogFile from './models/files/TextLogFile';
 import TextToJSONLogsAdapter from './models/adapters/TextToJSONLogsAdapter';
-import { formatTime } from './utils/units';
+import TimeDuration, { TimeUnit } from './models/TimeDuration';
 
 const ROOT_DIR = path.join(__dirname, '..');
 
@@ -19,12 +19,15 @@ const run = async (args: Args) => {
     const { inputFile, outputFile } = args;
 
     // Generate dummy app logs if necessary
+    let generationTime = new TimeDuration(0, TimeUnit.Milliseconds);
     if (await inputFile.touch()) {
-        await inputFile.generate(N_LOGS);
+        generationTime = await inputFile.generate(N_LOGS);
     }
 
     const adapter = new TextToJSONLogsAdapter(({ level }: LogJSON) => level === Severity.Error);
     await adapter.execute(inputFile, outputFile);
+
+    return generationTime;
 }
 
 
@@ -36,16 +39,14 @@ const execute = async () => {
     const now = new Date();
     logger.info(`Started log import/export at: ${now.toISOString()}`);
 
-    await run({
+    const generationTime = await run({
         inputFile: new TextLogFile(path.join(ROOT_DIR, input)),
         outputFile: new JSONLogFile(path.join(ROOT_DIR, output)),
     });
 
     const then = new Date();
-    logger.info('Done!');
-    
-    const duration = then.getTime() - now.getTime(); // ms
-    logger.info(`Parsing of logs took: ${formatTime({ time: duration, unit: TimeUnit.Milliseconds })}`)
+    const duration = new TimeDuration(then.getTime() - now.getTime(), TimeUnit.Milliseconds).subtract(generationTime);
+    logger.info(`Parsing of logs took: ${duration.format()}`);
 }
 
 if ([Environment.Development].includes(ENV)) {

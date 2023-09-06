@@ -6,7 +6,6 @@ import LineParser from '../streams/LineParser';
 import { LogFilter } from '../../types';
 import logger from '../../logger';
 import { pipeline } from 'stream/promises';
-import { formatSize } from '../../utils/units';
 
 class TextToJSONLogsAdapter {
     protected transforms: Transform[];
@@ -43,8 +42,8 @@ class TextToJSONLogsAdapter {
             await outputFile.end();
 
             // Give user info about files
-            logger.info(`Input file size was: ${formatSize(inputFile.getSize())}`);
-            logger.info(`Output file size is: ${formatSize(outputFile.getSize())}`);
+            logger.info(`Input file size: ${inputFile.getSize().format()}`);
+            logger.info(`Output file size: ${outputFile.getSize().format()}`);
 
         } catch (err: any) {
             logger.fatal(`Could not parse app logs: ${err.message}`);
