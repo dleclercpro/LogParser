@@ -6,23 +6,23 @@ import logger from '../../logger';
 class PipeWrite extends Pipe<WriteStream> {
 
     protected onReady() {
-        logger.debug('The writing stream is ready.');
+        logger.trace('The writing stream is ready.');
     }
 
     protected onFinish() {
-        logger.debug(`The writing stream is finished.`);
+        logger.trace(`The writing stream is finished.`);
     }
 
     protected onDrain() {
-        logger.debug(`The writing stream was drained.`);
+        logger.trace(`The writing stream was drained.`);
     }
 
     protected onOpen() {
-        logger.debug(`The writing stream was opened.`);
+        logger.trace(`The writing stream was opened.`);
     }
 
     protected onClose() {
-        logger.debug(`The writing stream was closed.`);
+        logger.trace(`The writing stream was closed.`);
     }
 
     protected onError(err: Error) {

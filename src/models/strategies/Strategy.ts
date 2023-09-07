@@ -32,7 +32,7 @@ abstract class Strategy {
     public abstract run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity): Promise<void>;
 
     protected async start() {
-        logger.info(`---------- ${this.name}: START ----------`);
+        logger.info(`--------------- Strategy: ${this.name} [START] ---------------`);
 
         if (!this.inputFile) throw new Error('Missing input file!');
         if (!this.outputFile) throw new Error('Missing output file!');
@@ -61,7 +61,7 @@ abstract class Strategy {
         }
         
         logger.info(`Strategy took: ${this.durations.total.format()}`);
-        logger.info(`---------- ${this.name}: END ----------`);
+        logger.info(`--------------- Strategy: ${this.name} [END] ---------------`);
     }
 }
 

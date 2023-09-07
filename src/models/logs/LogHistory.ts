@@ -1,3 +1,4 @@
+import { LOCALE } from '../../config';
 import { SEVERITY_ORDERING } from '../../constants';
 import { Severity } from '../../types';
 import Log from './Log';
@@ -24,8 +25,10 @@ class LogHistory {
         return this.logs;
     }
 
-    public size() {
-        return this.logs.length;
+    public size({ format }: { format?: boolean }) {
+        if (!format) return this.logs.length;
+
+        return this.logs.length.toLocaleString(LOCALE);
     }
 
     /**

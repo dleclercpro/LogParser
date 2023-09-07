@@ -21,11 +21,11 @@ class MemoryStrategy extends Strategy {
         await this.start();
     
         let history = parser.parse(await importer.import(inputFile));
-        logger.info(`Found ${history.size()} log entries altogether.`);
+        logger.info(`Found ${history.size({ format: true })} log entries altogether.`);
     
         if (severity) {
             history = history.of(severity);
-            logger.info(`Found ${history.size()} log entries of severity '${severity}'.`);    
+            logger.info(`Found ${history.size({ format: true })} log entries of severity '${severity}'.`);    
         }
 
         await exporter.export(outputFile, history);

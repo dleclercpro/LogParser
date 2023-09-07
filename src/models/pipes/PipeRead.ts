@@ -6,27 +6,27 @@ import logger from '../../logger';
 class PipeRead extends Pipe<ReadStream> {
 
     protected onReady() {
-        logger.debug('The reading stream is ready.');
+        logger.trace('The reading stream is ready.');
     }
 
     protected onResume() {
-        logger.debug(`Reading data from stream was resumed.`);
+        logger.trace(`Reading data from stream was resumed.`);
     }
 
     protected onEnd() {
-        logger.debug(`No more data to be read from stream.`);
+        logger.trace(`No more data to be read from stream.`);
     }
 
     protected onPause() {
-        logger.debug(`The reading stream was paused.`);
+        logger.trace(`The reading stream was paused.`);
     }
 
     protected onOpen() {
-        logger.debug('The reading stream was opened.');
+        logger.trace('The reading stream was opened.');
     }
 
     protected onClose() {
-        logger.debug(`The reading stream was closed.`);
+        logger.trace(`The reading stream was closed.`);
     }
 
     protected onError(err: Error) {

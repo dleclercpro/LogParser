@@ -5,6 +5,7 @@ import { Severity } from '../../types';
 import { isValidISODate } from '../../utils/time';
 import { SEVERITY_ORDERING } from '../../constants';
 import logger from '../../logger';
+import { LOCALE } from '../../config';
 
 interface TextLineInfo {
     details: string,
@@ -59,7 +60,7 @@ class LogParser extends Parser<LogHistory> {
         }
 
         if (errors.length > 0) {
-            logger.warn(`Invalid line: ${index} [${errors.join('|')}]`);
+            logger.warn(`Line ${(index + 1).toLocaleString(LOCALE)} is invalid [${errors.join(' | ')}]`);
             return;
         }
         

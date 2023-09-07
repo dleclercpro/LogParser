@@ -20,6 +20,7 @@ export const loadEnvironment = () => {
     dotenv.config({
         path: path.resolve(process.cwd(), `.env.${env}`),
     });
+    console.debug(`Loaded environment: '${env}'\n`);
 
     return env;
 }
