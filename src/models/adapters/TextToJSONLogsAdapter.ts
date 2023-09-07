@@ -19,10 +19,6 @@ class TextToJSONLogsAdapter {
 
     public async execute(inputFile: TextLogFile, outputFile: JSONLogFile) {
 
-        // Give user some info regarding
-        logger.info(`Reading logs from: '${inputFile.getPath()}'`);
-        logger.info(`Writing logs to: '${outputFile.getPath()}'`);
-
         // Delete existing and create new file
         await outputFile.delete();
         await outputFile.create();
