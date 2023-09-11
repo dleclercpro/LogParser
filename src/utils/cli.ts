@@ -5,6 +5,7 @@ import StreamsStrategy from '../models/strategies/StreamsStrategy';
 import path from 'path';
 import JSONLogFile from '../models/files/JSONLogFile';
 import TextLogFile from '../models/files/TextLogFile';
+import { SEVERITY_ORDERING } from '../constants';
 
 const ROOT_DIR = path.join(__dirname, '../..');
 
@@ -13,6 +14,8 @@ export const parseArgs = () => {
 
     if (!level) {
         throw new Error(`No log level provided!`);
+    } else if (!SEVERITY_ORDERING.includes(level)) {
+        throw new Error(`Invalid log level provided!`);
     }
 
     if (!input) {
