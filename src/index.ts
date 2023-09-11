@@ -1,19 +1,19 @@
-import { Environment } from './types';
+import { Environment, Severity } from './types';
 import { ENV, STRATEGIES } from './config';
 import { parseArgs } from './utils/cli';
 
 
 
 const execute = async () => {
-    const { inputFile, outputFile, strategy } = parseArgs();
+    const { inputFile, outputFile, strategy, level } = parseArgs();
 
     if (strategy) {
-        await strategy.run(inputFile, outputFile);
+        await strategy.run(inputFile, outputFile, level);
 
     } else {
         // No strategy picked: execute them all sequentially
         for (const strategy of STRATEGIES) {
-            await strategy.run(inputFile, outputFile);
+            await strategy.run(inputFile, outputFile, level);
         }
     }
 }

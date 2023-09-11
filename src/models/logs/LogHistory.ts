@@ -48,7 +48,7 @@ class LogHistory {
         const logs = this.logs.filter(log => {
             const order = SEVERITY_ORDERING.indexOf(log.getLevel());
 
-            return fromOrder <= order && order <= toOrder;
+            return (fromOrder <= order) && (order <= toOrder);
         });
 
         return new LogHistory(logs);

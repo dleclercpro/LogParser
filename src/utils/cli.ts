@@ -9,7 +9,11 @@ import TextLogFile from '../models/files/TextLogFile';
 const ROOT_DIR = path.join(__dirname, '../..');
 
 export const parseArgs = () => {
-    const { input, output, strategy: s } = minimist(process.argv.slice(2));
+    const { level, input, output, strategy: s } = minimist(process.argv.slice(2));
+
+    if (!level) {
+        throw new Error(`No log level provided!`);
+    }
 
     if (!input) {
         throw new Error(`No path to input log file provided!`);
@@ -38,6 +42,7 @@ export const parseArgs = () => {
     }
 
     return {
+        level,
         inputFile,
         outputFile,
         strategy,
