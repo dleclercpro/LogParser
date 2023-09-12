@@ -8,7 +8,7 @@ The entirety of the application logs is read from a given text file before said 
 
 In order to run the parser in this mode, execute the following command in the terminal:
 ```
-npm start:memory
+npm run start:normal:memory
 ```
 
 ### Streams
@@ -16,8 +16,17 @@ The application logs are read and output using streams. This makes handling of v
 
 In order to run the parser in this mode, execute the following command in the terminal:
 ```
-npm start:streams
+npm run start:normal:streams
 ```
+
+## Performance Comparison
+The available strategies' respective performances can be compared in terms of execution speed. To do so, run the following command:
+```
+npm run start:performance
+```
+
+A graph will be generated in the data directory, where each strategy's required time of execution as a function of number of logs to process will be plotted. Here is an example of the image generated:
+![Performance Comparison between Parsing Strategies][./resources/PerformanceComparison.png]
 
 ## Testing
 Some unit tests have been written. They can be run using:
@@ -26,9 +35,7 @@ npm test
 ```
 
 ## Note
-If you want an overview of the strategies' performance, you can always execute the following:
+If you want to run all strategies sequentially, you can execute the following:
 ```
 npm start
 ```
-
-Using this command, all strategies will be executed.
