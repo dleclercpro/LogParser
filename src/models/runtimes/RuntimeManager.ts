@@ -1,13 +1,13 @@
 import { isArgsValid } from '../../utils/cli';
 import NormalRuntime from './NormalRuntime';
-import PerformanceComparisonRuntime from './PerformanceComparisonRuntime';
+import PerformanceRuntime from './PerformanceRuntime';
 import Runtime, { Args, RuntimeName } from './Runtime';
 
 // Singleton
 class RuntimeManager {
     private static instance: RuntimeManager;
 
-    private runtimes: Runtime[] = [NormalRuntime, PerformanceComparisonRuntime];
+    private runtimes: Runtime[] = [NormalRuntime, PerformanceRuntime];
 
     private constructor() {
 

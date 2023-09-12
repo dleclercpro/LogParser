@@ -5,10 +5,10 @@ import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
 import LogImporter from '../importers/LogImporter';
 import LogParser from '../parsers/LogParser';
-import Strategy from './Strategy';
+import Strategy, { StrategyName } from './Strategy';
 
 class MemoryStrategy extends Strategy {
-    protected name: string = 'Memory';
+    protected name: string = StrategyName.Memory;
 
     public async run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity) {
         this.inputFile = inputFile;

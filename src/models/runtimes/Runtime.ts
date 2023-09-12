@@ -2,7 +2,7 @@ import logger from '../../logger';
 
 export enum RuntimeName {
     Normal = 'Normal',
-    PerformanceComparison = 'PerformanceComparison',
+    Performance = 'Performance',
 }
 
 export interface Args {

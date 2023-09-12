@@ -6,17 +6,19 @@ import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
 import Runtime, { Args, RuntimeName, ValidArgs } from './Runtime';
 import logger from '../../logger';
+import { StrategyName } from '../strategies/Strategy';
+import PerformanceGraph from '../PerformanceGraph';
 
 
 
-interface PerformanceComparison {
+interface Performance {
     size: number,
     durations: {
         [strategy: string]: TimeDuration,
     },
 }
 
-const VALID_ARGS_SET: ValidArgs = {
+const VALID_ARGS: ValidArgs = {
     level: {
         isRequired: true,
         validate: () => true,
@@ -26,11 +28,11 @@ const VALID_ARGS_SET: ValidArgs = {
 
 
 // Singleton
-class PerformanceComparisonRuntime extends Runtime {
-    private static instance: PerformanceComparisonRuntime;
+class PerformanceRuntime extends Runtime {
+    private static instance: PerformanceRuntime;
 
-    protected name: RuntimeName = RuntimeName.PerformanceComparison;
-    protected validArgs: ValidArgs = VALID_ARGS_SET;
+    protected name: RuntimeName = RuntimeName.Performance;
+    protected validArgs: ValidArgs = VALID_ARGS;
 
     private constructor() {
         super();
@@ -39,7 +41,7 @@ class PerformanceComparisonRuntime extends Runtime {
     protected async doExecute(args: Args) {
         const { level } = this.getContext(args);
 
-        const results: PerformanceComparison[] = [];
+        const results: Performance[] = [];
         
         for (const size of N_LOGS_RUNTIME_PERFORMANCE_COMPARISON) {
             const inputFile = new TextLogFile(path.join(ROOT_DIR, 'data', `${size.toLocaleString(LOCALE)}.log`));
@@ -57,13 +59,13 @@ class PerformanceComparisonRuntime extends Runtime {
                 results[results.length - 1].durations[strategy.getName()] = await strategy.run(inputFile, outputFile, level);
             }
         }
-    
-        logger.info(results);
+
+        await this.generatePerformanceGraph(results);
     }
 
     public static getInstance() {
         if (!this.instance) {
-            this.instance = new PerformanceComparisonRuntime();
+            this.instance = new PerformanceRuntime();
         }
 
         return this.instance;
@@ -76,6 +78,28 @@ class PerformanceComparisonRuntime extends Runtime {
             level: level as Severity,
         };
     }
+
+    private async generatePerformanceGraph(results: Performance[]) {
+        logger.info(`Generating performance graph for all strategies...`);
+
+        const graph = new PerformanceGraph(`${ROOT_DIR}/data/performance-comparison.png`);
+
+        const title = 'Strategy Performance based on Number of Logs to Process';
+        const xAxisLabel = 'Number of Logs (-)';
+        const yAxisLabel = 'Duration (ms)';
+
+        const data = [{
+            label: StrategyName.Memory,
+            data: results.map(d => ({ x: d.size, y: d.durations[StrategyName.Memory].toMs().getAmount() })),
+            color: 'orange',
+        }, {
+            label: StrategyName.Streams,
+            data: results.map(d => ({ x: d.size, y: d.durations[StrategyName.Streams].toMs().getAmount() })),
+            color: 'purple',
+        }];
+
+        await graph.generate(data, { title, xAxisLabel, yAxisLabel });
+    }
 }
 
-export default PerformanceComparisonRuntime.getInstance();
+export default PerformanceRuntime.getInstance();

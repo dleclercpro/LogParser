@@ -6,8 +6,8 @@ import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
 
 export enum StrategyName {
-    Streams = 'streams',
-    Memory = 'memory',
+    Streams = 'Streams',
+    Memory = 'Memory',
 }
 
 abstract class Strategy {

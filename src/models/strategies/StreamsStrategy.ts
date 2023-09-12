@@ -2,7 +2,7 @@ import { LogJSON, Severity } from '../../types';
 import TextToJSONLogsAdapter from '../adapters/TextToJSONLogsAdapter';
 import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
-import Strategy from './Strategy';
+import Strategy, { StrategyName } from './Strategy';
 
 const createSeverityFilter = (severity?: Severity) => {
     if (severity) {
@@ -12,7 +12,7 @@ const createSeverityFilter = (severity?: Severity) => {
 }
 
 class StreamsStrategy extends Strategy {
-    protected name: string = 'Streams';
+    protected name: string = StrategyName.Streams;
 
     public async run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity) {
         this.inputFile = inputFile;

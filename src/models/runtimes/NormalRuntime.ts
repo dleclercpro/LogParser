@@ -10,7 +10,7 @@ import Runtime, { Args, RuntimeName, ValidArgs } from './Runtime';
 
 
 
-const VALID_ARGS_SET: ValidArgs = {
+const VALID_ARGS: ValidArgs = {
     input: {
         isRequired: true,
         validate: (value) => {
@@ -67,7 +67,7 @@ class NormalRuntime extends Runtime {
     private static instance: NormalRuntime;
 
     protected name: RuntimeName = RuntimeName.Normal;
-    protected validArgs: ValidArgs = VALID_ARGS_SET;
+    protected validArgs: ValidArgs = VALID_ARGS;
 
     private constructor() {
         super();
