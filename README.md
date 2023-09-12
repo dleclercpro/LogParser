@@ -26,7 +26,7 @@ npm run start:performance
 ```
 
 A graph will be generated in the data directory, where each strategy's required time of execution as a function of number of logs to process will be plotted. Here is an example of the image generated:
-![Performance Comparison between Parsing Strategies][./resources/PerformanceComparison.png]
+![Performance Comparison between Strategies](./resources/PerformanceComparison.png)
 
 ## Testing
 Some unit tests have been written. They can be run using:
