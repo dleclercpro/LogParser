@@ -32,7 +32,7 @@ class MemoryStrategy extends Strategy {
 
         await this.end();
 
-        return this.durations.total;
+        return this.duration;
     }
 }
 

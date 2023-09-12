@@ -4,9 +4,11 @@
   "author": "David Leclerc",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "cross-env ENV=development nodemon ./src/index.ts --level error --input ./data/app.log --output ./data/logs.json",
-    "start:streams": "cross-env ENV=development nodemon ./src/index.ts --level error --input ./data/app.log --output ./data/logs.json --strategy streams",
-    "start:memory": "cross-env ENV=development nodemon ./src/index.ts --level error --input ./data/app.log --output ./data/logs.json --strategy memory",
+    "start": "npm run start:normal",
+    "start:normal": "cross-env ENV=development nodemon ./src/index.ts --level error --input ./data/app.log --output ./data/logs.json",
+    "start:normal:streams": "cross-env ENV=development nodemon ./src/index.ts --level error --input ./data/app.log --output ./data/logs.json --strategy streams",
+    "start:normal:memory": "cross-env ENV=development nodemon ./src/index.ts --level error --input ./data/app.log --output ./data/logs.json --strategy memory",
+    "start:performance": "cross-env ENV=development nodemon ./src/index.ts --level error",
     "test": "cross-env ENV=test jest --runInBand"
   },
   "dependencies": {

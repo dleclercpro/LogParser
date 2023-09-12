@@ -1,4 +1,3 @@
-import { N_LOGS } from '../../config';
 import { NO_TIME_DURATION } from '../../constants';
 import logger from '../../logger';
 import { Severity } from '../../types';
@@ -19,14 +18,10 @@ abstract class Strategy {
 
     protected startTime?: Date;
     protected endTime?: Date;
-
-    protected durations: {
-        generation: TimeDuration,
-        total: TimeDuration,
-    }
+    protected duration: TimeDuration;
 
     public constructor() {
-        this.durations = { generation: NO_TIME_DURATION, total: NO_TIME_DURATION };
+        this.duration = NO_TIME_DURATION;
     }
     
     public abstract run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity): Promise<TimeDuration>;
@@ -44,23 +39,13 @@ abstract class Strategy {
         // Give info about I/O files
         logger.info(`Reading logs from: '${this.inputFile.getPath()}'`);
         logger.info(`Writing logs to: '${this.outputFile.getPath()}'`);
-
-        // Generate dummy app logs if necessary
-        if (await this.inputFile.touch()) {
-            this.durations.generation = await this.inputFile.generate(N_LOGS);
-        }
     }
 
     protected async end() {
         this.endTime = new Date();
-        this.durations.total = new TimeDuration(this.endTime!.getTime() - this.startTime!.getTime(), TimeUnit.Milliseconds);
+        this.duration = new TimeDuration(this.endTime!.getTime() - this.startTime!.getTime(), TimeUnit.Milliseconds);
         
-        // In case input log file needed to be generated, subtract the required time
-        if (!this.durations.generation.isZero()) {
-            this.durations.total = this.durations.total.subtract(this.durations.generation);
-        }
-        
-        logger.info(`Strategy took: ${this.durations.total.format()}`);
+        logger.info(`Strategy took: ${this.duration.format()}`);
         logger.info(`--------------- Strategy: ${this.name} [END] ---------------`);
     }
 

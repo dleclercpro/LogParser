@@ -1,5 +1,5 @@
 import path from 'path';
-import { ROOT_DIR, STRATEGIES } from '../../config';
+import { LOCALE, N_LOGS_RUNTIME_PERFORMANCE_COMPARISON, ROOT_DIR, STRATEGIES } from '../../config';
 import { Severity } from '../../types';
 import TimeDuration from '../TimeDuration';
 import JSONLogFile from '../files/JSONLogFile';
@@ -16,8 +16,6 @@ interface PerformanceComparison {
     },
 }
 
-// FIXME: move to config or make an input argument
-const SIZES = [100, 1_000, 10_000, 100_000, 1_000_000];
 const VALID_ARGS_SET: ValidArgs = {
     level: {
         isRequired: true,
@@ -39,14 +37,20 @@ class PerformanceComparisonRuntime extends Runtime {
     }
 
     protected async doExecute(args: Args) {
-        const {level } = this.getContext(args);
+        const { level } = this.getContext(args);
 
         const results: PerformanceComparison[] = [];
         
-        for (const size of SIZES) {
-            const inputFile = new TextLogFile(path.join(ROOT_DIR, 'data', size.toString()));
-            const outputFile = new JSONLogFile(path.join(ROOT_DIR, 'data', size.toString()));
+        for (const size of N_LOGS_RUNTIME_PERFORMANCE_COMPARISON) {
+            const inputFile = new TextLogFile(path.join(ROOT_DIR, 'data', `${size.toLocaleString(LOCALE)}.log`));
+            const outputFile = new JSONLogFile(path.join(ROOT_DIR, 'data', `${size.toLocaleString(LOCALE)}.json`));
         
+            // Generate dummy app logs if necessary
+            if (await inputFile.touch()) {
+                await inputFile.generate(size);
+            }
+
+            // Create new results entry
             results.push({ size, durations: {} });
     
             for (const strategy of Object.values(STRATEGIES)) {

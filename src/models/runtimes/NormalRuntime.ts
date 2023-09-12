@@ -1,5 +1,5 @@
 import path from 'path';
-import { ROOT_DIR, STRATEGIES } from '../../config';
+import { N_LOGS_RUNTIME_NORMAL, ROOT_DIR, STRATEGIES } from '../../config';
 import { SEVERITY_ORDERING } from '../../constants';
 import logger from '../../logger';
 import { Severity } from '../../types';
@@ -75,6 +75,11 @@ class NormalRuntime extends Runtime {
 
     protected async doExecute(args: Args) {
         const { inputFile, outputFile, level, strategy } = this.getContext(args);
+
+        // Generate dummy app logs if necessary
+        if (await inputFile.touch()) {
+            await inputFile.generate(N_LOGS_RUNTIME_NORMAL);
+        }
 
         if (strategy) {
             await strategy.run(inputFile, outputFile, level as Severity);
