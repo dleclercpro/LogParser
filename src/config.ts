@@ -1,8 +1,14 @@
+import path from 'path';
 import MemoryStrategy from './models/strategies/MemoryStrategy';
 import StreamsStrategy from './models/strategies/StreamsStrategy';
 import { loadEnvironment } from './utils/env';
+import { StrategyName } from './models/strategies/Strategy';
 
+export const ROOT_DIR = path.resolve(__dirname, '..');
 export const ENV = loadEnvironment();
 export const LOCALE = 'en';
 export const N_LOGS = 10_000;
-export const STRATEGIES = [new StreamsStrategy(), new MemoryStrategy()];
+export const STRATEGIES = {
+    [StrategyName.Streams]: new StreamsStrategy(),
+    [StrategyName.Memory]: new MemoryStrategy(),
+};

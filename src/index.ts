@@ -1,21 +1,18 @@
-import { Environment, Severity } from './types';
-import { ENV, STRATEGIES } from './config';
-import { parseArgs } from './utils/cli';
+import { Environment } from './types';
+import { ENV } from './config';
+import minimist from 'minimist';
+import RuntimeManager from './models/runtimes/RuntimeManager';
 
 
 
 const execute = async () => {
-    const { inputFile, outputFile, strategy, level } = parseArgs();
+    const args: { [arg: string]: any } = minimist(process.argv.slice(2));
 
-    if (strategy) {
-        await strategy.run(inputFile, outputFile, level);
+    // Remove any argument without value
+    delete args._;
 
-    } else {
-        // No strategy picked: execute them all sequentially
-        for (const strategy of STRATEGIES) {
-            await strategy.run(inputFile, outputFile, level);
-        }
-    }
+    const runtime = RuntimeManager.getRuntimeByArgs(args);
+    await runtime.execute(args);
 }
 
 

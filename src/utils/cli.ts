@@ -1,53 +1,24 @@
-import minimist from 'minimist';
-import MemoryStrategy from '../models/strategies/MemoryStrategy';
-import { Strategies } from '../models/strategies/Strategy';
-import StreamsStrategy from '../models/strategies/StreamsStrategy';
-import path from 'path';
-import JSONLogFile from '../models/files/JSONLogFile';
-import TextLogFile from '../models/files/TextLogFile';
-import { SEVERITY_ORDERING } from '../constants';
+import { Args, ValidArgs } from '../models/runtimes/Runtime';
 
-const ROOT_DIR = path.join(__dirname, '../..');
+export const isArgsValid = (args: Args, validArgs: ValidArgs) => {
+    const argNames = Object.keys(args);
+    const validArgNames = Object.keys(validArgs);
+    const requiredArgNames = validArgNames.filter(arg => validArgs[arg].isRequired);
 
-export const parseArgs = () => {
-    const { level, input, output, strategy: s } = minimist(process.argv.slice(2));
-
-    if (!level) {
-        throw new Error(`No log level provided!`);
-    } else if (!SEVERITY_ORDERING.includes(level)) {
-        throw new Error(`Invalid log level provided!`);
+    // No unknown argument is provided
+    if (!argNames.every(arg => validArgNames.includes(arg))) {
+        return false;
     }
 
-    if (!input) {
-        throw new Error(`No path to input log file provided!`);
+    // All required arguments must be found
+    if (!requiredArgNames.every(arg => argNames.includes(arg))) {
+        return false;
     }
 
-    if (!output) {
-        throw new Error(`No path to output log file provided!`);
+    // Validate all provided arguments
+    if (!argNames.every(arg => validArgs[arg].validate(args[arg]))) {
+        return false;
     }
 
-    const inputFile = new TextLogFile(path.join(ROOT_DIR, input));
-    const outputFile = new JSONLogFile(path.join(ROOT_DIR, output));
-
-    let strategy;
-    
-    if (s) {
-        switch (s) {
-            case Strategies.Streams:
-                strategy = new StreamsStrategy();
-                break;
-            case Strategies.Memory:
-                strategy = new MemoryStrategy();
-                break;
-            default:
-                throw new Error('Invalid strategy.');
-        }
-    }
-
-    return {
-        level,
-        inputFile,
-        outputFile,
-        strategy,
-    };
+    return true;
 }

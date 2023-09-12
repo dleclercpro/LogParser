@@ -6,7 +6,7 @@ import TimeDuration, { TimeUnit } from '../TimeDuration';
 import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
 
-export enum Strategies {
+export enum StrategyName {
     Streams = 'streams',
     Memory = 'memory',
 }
@@ -29,7 +29,7 @@ abstract class Strategy {
         this.durations = { generation: NO_TIME_DURATION, total: NO_TIME_DURATION };
     }
     
-    public abstract run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity): Promise<void>;
+    public abstract run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity): Promise<TimeDuration>;
 
     protected async start() {
         logger.info(`--------------- Strategy: ${this.name} [START] ---------------`);
@@ -62,6 +62,10 @@ abstract class Strategy {
         
         logger.info(`Strategy took: ${this.durations.total.format()}`);
         logger.info(`--------------- Strategy: ${this.name} [END] ---------------`);
+    }
+
+    public getName() {
+        return this.name;
     }
 }
 

@@ -31,6 +31,8 @@ class MemoryStrategy extends Strategy {
         await exporter.export(outputFile, history);
 
         await this.end();
+
+        return this.durations.total;
     }
 }
 

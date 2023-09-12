@@ -23,6 +23,8 @@ class StreamsStrategy extends Strategy {
         await this.start();
         await adapter.execute(inputFile, outputFile);
         await this.end();
+
+        return this.durations.total;
     }
 }
 
