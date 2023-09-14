@@ -1,4 +1,4 @@
-import { isArgsValid } from '../../utils/cli';
+import { areArgsValid } from '../../utils/cli';
 import NormalRuntime from './NormalRuntime';
 import PerformanceRuntime from './PerformanceRuntime';
 import Runtime, { Args, RuntimeName } from './Runtime';
@@ -27,10 +27,10 @@ class RuntimeManager {
 
     public getRuntimeByArgs(args: Args) {
         const runtime = this.runtimes
-            .find(runtime => isArgsValid(args, runtime.getValidArgs()));
+            .find(runtime => areArgsValid(args, runtime.getValidArgs()));
     
         if (!runtime) {
-            throw Error('Invalid set of arguments provided!');
+            throw Error('Invalid arguments provided!');
         }
     
         return runtime;

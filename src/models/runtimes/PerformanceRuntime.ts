@@ -1,5 +1,5 @@
 import path from 'path';
-import { LOCALE, N_LOGS_RUNTIME_PERFORMANCE_COMPARISON, ROOT_DIR, STRATEGIES } from '../../config';
+import { LOCALE, N_LOGS_RUNTIME_PERFORMANCE_COMPARISON, STRATEGIES } from '../../config';
 import { Severity } from '../../types';
 import TimeDuration from '../TimeDuration';
 import JSONLogFile from '../files/JSONLogFile';
@@ -44,8 +44,8 @@ class PerformanceRuntime extends Runtime {
         const results: Performance[] = [];
         
         for (const size of N_LOGS_RUNTIME_PERFORMANCE_COMPARISON) {
-            const inputFile = new TextLogFile(path.join(ROOT_DIR, 'data', `${size.toLocaleString(LOCALE)}.log`));
-            const outputFile = new JSONLogFile(path.join(ROOT_DIR, 'data', `${size.toLocaleString(LOCALE)}.json`));
+            const inputFile = new TextLogFile(path.join(process.cwd(), 'data', `${size.toLocaleString(LOCALE)}.log`));
+            const outputFile = new JSONLogFile(path.join(process.cwd(), 'data', `${size.toLocaleString(LOCALE)}.json`));
         
             // Generate dummy app logs if necessary
             if (await inputFile.touch()) {
@@ -82,7 +82,7 @@ class PerformanceRuntime extends Runtime {
     private async generatePerformanceGraph(results: Performance[]) {
         logger.info(`Generating performance graph for all strategies...`);
 
-        const graph = new PerformanceGraph(`${ROOT_DIR}/data/performance-comparison.png`);
+        const graph = new PerformanceGraph(`${process.cwd()}/data/performance-comparison.png`);
 
         const title = 'Strategy Performance based on Number of Logs to Process';
         const xAxisLabel = 'Number of Logs (-)';

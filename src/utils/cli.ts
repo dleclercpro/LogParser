@@ -1,6 +1,6 @@
 import { Args, ValidArgs } from '../models/runtimes/Runtime';
 
-export const isArgsValid = (args: Args, validArgs: ValidArgs) => {
+export const areArgsValid = (args: Args, validArgs: ValidArgs) => {
     const argNames = Object.keys(args);
     const validArgNames = Object.keys(validArgs);
     const requiredArgNames = validArgNames.filter(arg => validArgs[arg].isRequired);

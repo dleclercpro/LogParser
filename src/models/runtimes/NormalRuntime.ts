@@ -1,5 +1,6 @@
 import path from 'path';
-import { N_LOGS_RUNTIME_NORMAL, ROOT_DIR, STRATEGIES } from '../../config';
+import process from 'process';
+import { N_LOGS_RUNTIME_NORMAL, STRATEGIES } from '../../config';
 import { SEVERITY_ORDERING } from '../../constants';
 import logger from '../../logger';
 import { Severity } from '../../types';
@@ -104,8 +105,8 @@ class NormalRuntime extends Runtime {
         const { input, output, level, strategy } = args;
 
         return {
-            inputFile: new TextLogFile(path.join(ROOT_DIR, input)),
-            outputFile: new JSONLogFile(path.join(ROOT_DIR, output)),
+            inputFile: new TextLogFile(path.join(process.cwd(), input)),
+            outputFile: new JSONLogFile(path.join(process.cwd(), output)),
             level: level as Severity,
             strategy: strategy ? STRATEGIES[strategy as StrategyName] : undefined,
         };
