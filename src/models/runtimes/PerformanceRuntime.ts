@@ -6,8 +6,9 @@ import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
 import Runtime, { Args, RuntimeName, ValidArgs } from './Runtime';
 import logger from '../../logger';
-import { StrategyName } from '../strategies/Strategy';
 import PerformanceGraph from '../PerformanceGraph';
+import StreamsStrategy from '../strategies/StreamsStrategy';
+import MemoryStrategy from '../strategies/MemoryStrategy';
 
 
 
@@ -88,15 +89,16 @@ class PerformanceRuntime extends Runtime {
         const xAxisLabel = 'Number of Logs (-)';
         const yAxisLabel = 'Duration (ms)';
 
-        const data = [{
-            label: StrategyName.Memory,
-            data: results.map(d => ({ x: d.size, y: d.durations[StrategyName.Memory].toMs().getAmount() })),
-            color: 'orange',
-        }, {
-            label: StrategyName.Streams,
-            data: results.map(d => ({ x: d.size, y: d.durations[StrategyName.Streams].toMs().getAmount() })),
-            color: 'purple',
-        }];
+        const opts = [
+            { strategy: MemoryStrategy, color: 'orange' },
+            { strategy: StreamsStrategy, color: 'purple' },
+        ];
+
+        const data = opts.map(({ strategy, color }) => ({
+            label: strategy.getName(),
+            data: results.map(d => ({ x: d.size, y: d.durations[strategy.getName()].toMs().getAmount() })),
+            color,
+        }));
 
         await graph.generate(data, { title, xAxisLabel, yAxisLabel });
     }

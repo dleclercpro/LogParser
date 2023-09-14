@@ -1,4 +1,5 @@
 import { LogJSON, Severity } from '../../types';
+import { capitalizeFirstCharacter } from '../../utils/string';
 import TextToJSONLogsAdapter from '../adapters/TextToJSONLogsAdapter';
 import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
@@ -12,7 +13,20 @@ const createSeverityFilter = (severity?: Severity) => {
 }
 
 class StreamsStrategy extends Strategy {
-    protected name: string = StrategyName.Streams;
+    private static instance?: StreamsStrategy;
+    protected name: string = capitalizeFirstCharacter(StrategyName.Streams);
+
+    private constructor() {
+        super();
+    }
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new StreamsStrategy();
+        }
+
+        return this.instance;
+    }
 
     public async run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity) {
         this.inputFile = inputFile;
@@ -28,4 +42,4 @@ class StreamsStrategy extends Strategy {
     }
 }
 
-export default StreamsStrategy;
+export default StreamsStrategy.getInstance();

@@ -1,5 +1,6 @@
 import logger from '../../logger';
 import { Severity } from '../../types';
+import { capitalizeFirstCharacter } from '../../utils/string';
 import JSONExporter from '../exporters/JSONExporter';
 import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
@@ -8,7 +9,20 @@ import LogParser from '../parsers/LogParser';
 import Strategy, { StrategyName } from './Strategy';
 
 class MemoryStrategy extends Strategy {
-    protected name: string = StrategyName.Memory;
+    private static instance?: MemoryStrategy;
+    protected name: string = capitalizeFirstCharacter(StrategyName.Memory);
+
+    private constructor() {
+        super();
+    }
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new MemoryStrategy();
+        }
+
+        return this.instance;
+    }
 
     public async run(inputFile: TextLogFile, outputFile: JSONLogFile, severity?: Severity) {
         this.inputFile = inputFile;
@@ -36,4 +50,4 @@ class MemoryStrategy extends Strategy {
     }
 }
 
-export default MemoryStrategy;
+export default MemoryStrategy.getInstance();
