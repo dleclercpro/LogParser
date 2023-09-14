@@ -1,4 +1,4 @@
-import { ChartData, ChartDataset, ChartOptions, Color } from 'chart.js';
+import { ChartOptions, Color } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { writeFile } from '../utils/file';
 
