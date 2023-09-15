@@ -59,7 +59,11 @@ class PerformanceRuntime extends Runtime {
             }
         }
 
-        await this.generateGraph(results);
+        logger.info(`Generating performance graph for all strategies...`);
+
+        const graph = new PerformanceGraph(`${process.cwd()}/data/performance-comparison.png`);
+
+        await graph.draw(results);
     }
 
     public static getInstance() {
@@ -76,14 +80,6 @@ class PerformanceRuntime extends Runtime {
         return {
             level: level as Severity,
         };
-    }
-
-    private async generateGraph(results: Performance[]) {
-        logger.info(`Generating performance graph for all strategies...`);
-
-        const graph = new PerformanceGraph(`${process.cwd()}/data/performance-comparison.png`);
-
-        await graph.draw(results);
     }
 }
 

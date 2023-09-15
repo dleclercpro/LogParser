@@ -1,5 +1,4 @@
 import { LogJSON, Severity } from '../../types';
-import { capitalizeFirstCharacter } from '../../utils/string';
 import TextToJSONLogsAdapter from '../adapters/TextToJSONLogsAdapter';
 import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
@@ -14,7 +13,7 @@ const createSeverityFilter = (severity?: Severity) => {
 
 class StreamsStrategy extends Strategy {
     private static instance?: StreamsStrategy;
-    protected name: string = capitalizeFirstCharacter(StrategyName.Streams);
+    protected label: string = StrategyName.Streams;
 
     private constructor() {
         super();

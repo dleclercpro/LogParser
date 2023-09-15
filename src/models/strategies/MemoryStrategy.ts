@@ -1,6 +1,5 @@
 import logger from '../../logger';
 import { Severity } from '../../types';
-import { capitalizeFirstCharacter } from '../../utils/string';
 import JSONExporter from '../exporters/JSONExporter';
 import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
@@ -10,7 +9,7 @@ import Strategy, { StrategyName } from './Strategy';
 
 class MemoryStrategy extends Strategy {
     private static instance?: MemoryStrategy;
-    protected name: string = capitalizeFirstCharacter(StrategyName.Memory);
+    protected label: string = StrategyName.Memory;
 
     private constructor() {
         super();
