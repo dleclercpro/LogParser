@@ -6,13 +6,11 @@ import JSONLogFile from '../files/JSONLogFile';
 import TextLogFile from '../files/TextLogFile';
 import Runtime, { Args, RuntimeName, ValidArgs } from './Runtime';
 import logger from '../../logger';
-import PerformanceGraph from '../PerformanceGraph';
-import StreamsStrategy from '../strategies/StreamsStrategy';
-import MemoryStrategy from '../strategies/MemoryStrategy';
+import PerformanceGraph from '../graphs/PerformanceGraph';
 
 
 
-interface Performance {
+export interface Performance {
     size: number,
     durations: {
         [strategy: string]: TimeDuration,
@@ -61,7 +59,7 @@ class PerformanceRuntime extends Runtime {
             }
         }
 
-        await this.generatePerformanceGraph(results);
+        await this.generateGraph(results);
     }
 
     public static getInstance() {
@@ -80,27 +78,12 @@ class PerformanceRuntime extends Runtime {
         };
     }
 
-    private async generatePerformanceGraph(results: Performance[]) {
+    private async generateGraph(results: Performance[]) {
         logger.info(`Generating performance graph for all strategies...`);
 
         const graph = new PerformanceGraph(`${process.cwd()}/data/performance-comparison.png`);
 
-        const title = 'Strategy Performance based on Number of Logs to Process';
-        const xAxisLabel = 'Number of Logs (-)';
-        const yAxisLabel = 'Duration (ms)';
-
-        const opts = [
-            { strategy: MemoryStrategy, color: 'orange' },
-            { strategy: StreamsStrategy, color: 'purple' },
-        ];
-
-        const data = opts.map(({ strategy, color }) => ({
-            label: strategy.getName(),
-            data: results.map(d => ({ x: d.size, y: d.durations[strategy.getName()].toMs().getAmount() })),
-            color,
-        }));
-
-        await graph.generate(data, { title, xAxisLabel, yAxisLabel });
+        await graph.draw(results);
     }
 }
 

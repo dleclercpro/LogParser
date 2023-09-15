@@ -1,6 +1,6 @@
-import { ChartData, ChartDataset, ChartOptions, Color } from 'chart.js';
+import { ChartOptions, Color } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import { writeFile } from '../utils/file';
+import { writeFile } from '../../utils/file';
 
 interface Options {
     title: string,
@@ -16,8 +16,10 @@ interface LineOptions {
     color: Color,
 }
 
-class PerformanceGraph {
+abstract class Graph<Data> {
     protected filepath: string;
+
+    public abstract draw(data: Data[]): Promise<void>;
 
     public constructor(filepath: string) {
         this.filepath = filepath;
@@ -96,4 +98,4 @@ class PerformanceGraph {
     }
 }
 
-export default PerformanceGraph;
+export default Graph;
